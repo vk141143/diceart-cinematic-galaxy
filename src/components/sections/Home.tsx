@@ -1,7 +1,7 @@
-
 import { useRef, useEffect, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { BackgroundVideo } from "@/components/BackgroundVideo";
 
 export function Home() {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -22,33 +22,8 @@ export function Home() {
 
   return (
     <section id="home" className="relative min-h-screen flex items-center pt-16">
-      {/* Video Background with Overlay */}
-      <div className="absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-background/95 via-background/80 to-background/95"></div>
-        
-        {/* Static background with gradient until we can add a real video background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-secondary/10 to-accent/10"></div>
-        
-        {/* Animated Particles/Elements */}
-        <div className="absolute inset-0">
-          {[...Array(20)].map((_, i) => (
-            <div 
-              key={i}
-              className="absolute rounded-full bg-primary/20 animate-float"
-              style={{
-                width: `${Math.random() * 10 + 5}px`,
-                height: `${Math.random() * 10 + 5}px`,
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDuration: `${Math.random() * 10 + 10}s`,
-                animationDelay: `${Math.random() * 5}s`,
-                opacity: Math.random() * 0.5 + 0.3
-              }}
-            ></div>
-          ))}
-        </div>
-      </div>
-
+      <BackgroundVideo />
+      
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-3xl mx-auto text-center">
           <h1 className={`text-4xl md:text-6xl font-bold mb-6 transition-all duration-1000 ${

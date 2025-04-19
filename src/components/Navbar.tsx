@@ -67,14 +67,18 @@ export function Navbar({ introCompleted }: NavbarProps) {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo - animates from center to corner */}
-          <div className={`flex items-center ${!introCompleted ? "fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" : ""}`}>
+          <div className={`flex items-center transition-all duration-500 ${
+            !introCompleted 
+              ? "fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" 
+              : ""
+          }`}>
             <a
               href="#home"
               onClick={(e) => {
                 e.preventDefault();
                 scrollToSection("home");
               }}
-              className={`flex items-center ${
+              className={`flex items-center transition-all duration-500 ${
                 introCompleted ? "animate-fade-in" : "animate-logo-to-corner"
               }`}
             >

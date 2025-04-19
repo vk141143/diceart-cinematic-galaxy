@@ -151,16 +151,12 @@ export default {
 				},
 				'logo-to-corner': {
 					'0%': {
-						transform: 'translate(-50%, -50%)',
-						top: '50%',
-						left: '50%',
-						fontSize: '4rem'
+						transform: "translate(-50%, -50%) scale(2)",
+						opacity: "1"
 					},
 					'100%': {
-						transform: 'translate(0, 0)',
-						top: '1rem',
-						left: '1rem',
-						fontSize: '1.5rem'
+						transform: "translate(0, 0) scale(1)",
+						opacity: "1"
 					}
 				}
 			},

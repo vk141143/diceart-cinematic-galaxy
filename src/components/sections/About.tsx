@@ -1,17 +1,17 @@
-
 import { useRef, useEffect, useState } from "react";
 import { Film, Star, Sparkles, Gamepad } from "lucide-react";
 
 export function About() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
+  const [hasBeenVisible, setHasBeenVisible] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
+        setIsVisible(entry.isIntersecting);
         if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.unobserve(entry.target);
+          setHasBeenVisible(true);
         }
       },
       { threshold: 0.1 }
@@ -28,6 +28,15 @@ export function About() {
     };
   }, []);
 
+  useEffect(() => {
+    if (!isVisible && hasBeenVisible) {
+      const timer = setTimeout(() => {
+        setHasBeenVisible(false);
+      }, 200);
+      return () => clearTimeout(timer);
+    }
+  }, [isVisible, hasBeenVisible]);
+
   const stats = [
     { value: "10+", label: "Years Experience", icon: <Film className="h-5 w-5" /> },
     { value: "50+", label: "Completed Projects", icon: <Star className="h-5 w-5" /> },
@@ -35,15 +44,20 @@ export function About() {
     { value: "100+", label: "Happy Clients", icon: <Gamepad className="h-5 w-5" /> },
   ];
 
+  const getAnimationClass = (index: number) => {
+    if (!hasBeenVisible) return "opacity-0";
+    return isVisible ? `opacity-100 animate-fade-in` : "opacity-0";
+  };
+
   return (
     <section id="about" ref={sectionRef} className="py-20 relative overflow-hidden">
-      {/* Background elements */}
       <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-background via-background to-muted/30 -z-10"></div>
       <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl -z-10"></div>
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-secondary/5 rounded-full blur-3xl -z-10"></div>
       
       <div className="container mx-auto px-4">
-        <div className={`text-center mb-16 transition-all duration-700 ${isVisible ? "opacity-100" : "opacity-0 translate-y-10"}`}>
+        <div className={`text-center mb-16 transition-all duration-700 ${getAnimationClass(0)}`}
+             style={{ transitionDelay: "200ms" }}>
           <h2 className="text-3xl md:text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-secondary to-primary">
             About Diceart Films
           </h2>
@@ -53,8 +67,8 @@ export function About() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          {/* About content */}
-          <div className={`space-y-6 transition-all duration-700 ${isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-20"}`}>
+          <div className={`space-y-6 transition-all duration-700 ${getAnimationClass(1)}`}
+               style={{ transitionDelay: "400ms" }}>
             <div className="relative inline-block">
               <span className="absolute -inset-1 bg-gradient-to-r from-primary to-secondary blur-lg opacity-30"></span>
               <h3 className="relative text-2xl font-bold mb-4">Our Story</h3>
@@ -81,9 +95,8 @@ export function About() {
             </div>
           </div>
 
-          {/* Stats and image */}
-          <div className={`transition-all duration-700 ${isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-20"}`}
-               style={{ transitionDelay: "300ms" }}>
+          <div className={`transition-all duration-700 ${getAnimationClass(2)}`}
+               style={{ transitionDelay: "600ms" }}>
             <div className="relative">
               <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-2xl blur-xl opacity-30 animate-pulse-glow"></div>
               <div className="relative aspect-video rounded-2xl overflow-hidden border border-primary/10 shadow-xl">
@@ -94,7 +107,6 @@ export function About() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent"></div>
                 
-                {/* Stats overlay */}
                 <div className="absolute inset-x-0 bottom-0 p-6">
                   <div className="grid grid-cols-2 gap-4">
                     {stats.map((stat, index) => (

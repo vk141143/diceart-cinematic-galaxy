@@ -1,9 +1,17 @@
 
 import { Link } from "react-router-dom";
 import { ExternalLink, Instagram, Twitter, Youtube, Facebook } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { LegalDialog } from "@/components/LegalDialog";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
+  const navigate = useNavigate();
+
+  const handleLegalNavigation = (tab: string) => {
+    navigate("/legal", { state: { activeTab: tab } });
+  };
 
   return (
     <footer className="bg-muted/30 py-12 text-muted-foreground">
@@ -77,33 +85,43 @@ export function Footer() {
             <h3 className="text-lg font-bold text-foreground">Legal</h3>
             <ul className="space-y-2">
               <li>
-                <Link 
-                  to="/legal" 
-                  className="text-sm hover:text-primary transition-colors flex items-center gap-1"
-                >
-                  Terms & Conditions
-                  <ExternalLink className="h-3 w-3" />
-                </Link>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <button 
+                      className="text-sm hover:text-primary transition-colors flex items-center gap-1"
+                    >
+                      Terms & Conditions
+                      <ExternalLink className="h-3 w-3" />
+                    </button>
+                  </DialogTrigger>
+                  <LegalDialog activeTab="terms" />
+                </Dialog>
               </li>
               <li>
-                <Link 
-                  to="/legal" 
-                  className="text-sm hover:text-primary transition-colors flex items-center gap-1"
-                  onClick={() => document.querySelector('[data-value="privacy"]')?.click()}
-                >
-                  Privacy Policy
-                  <ExternalLink className="h-3 w-3" />
-                </Link>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <button 
+                      className="text-sm hover:text-primary transition-colors flex items-center gap-1"
+                    >
+                      Privacy Policy
+                      <ExternalLink className="h-3 w-3" />
+                    </button>
+                  </DialogTrigger>
+                  <LegalDialog activeTab="privacy" />
+                </Dialog>
               </li>
               <li>
-                <Link 
-                  to="/legal" 
-                  className="text-sm hover:text-primary transition-colors flex items-center gap-1"
-                  onClick={() => document.querySelector('[data-value="refunds"]')?.click()}
-                >
-                  Cancellation & Refunds
-                  <ExternalLink className="h-3 w-3" />
-                </Link>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <button 
+                      className="text-sm hover:text-primary transition-colors flex items-center gap-1"
+                    >
+                      Cancellation & Refunds
+                      <ExternalLink className="h-3 w-3" />
+                    </button>
+                  </DialogTrigger>
+                  <LegalDialog activeTab="refunds" />
+                </Dialog>
               </li>
             </ul>
           </div>

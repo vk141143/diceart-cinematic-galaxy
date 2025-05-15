@@ -1,4 +1,3 @@
-
 import { DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { motion } from "framer-motion";
@@ -9,11 +8,17 @@ type LegalDialogProps = {
 };
 
 export function LegalDialog({ activeTab }: LegalDialogProps) {
-  const [currentTab, setCurrentTab] = useState(activeTab);
+  const [currentTab, setCurrentTab] = useState<"terms" | "privacy" | "refunds">(activeTab);
 
   useEffect(() => {
     setCurrentTab(activeTab);
   }, [activeTab]);
+
+  // Create a handler function with the correct type signature
+  const handleTabChange = (value: string) => {
+    // Cast the string value to our specific union type
+    setCurrentTab(value as "terms" | "privacy" | "refunds");
+  };
 
   return (
     <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
@@ -24,7 +29,7 @@ export function LegalDialog({ activeTab }: LegalDialogProps) {
       <Tabs 
         defaultValue={currentTab} 
         value={currentTab} 
-        onValueChange={setCurrentTab}
+        onValueChange={handleTabChange}
         className="mt-6"
       >
         <div className="flex justify-center mb-6">

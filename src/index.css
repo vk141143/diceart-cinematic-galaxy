@@ -5,44 +5,45 @@
 
 @layer base {
   :root {
-    --background: 220 20% 12%;
-    --foreground: 210 40% 98%;
+    /* Light theme with the cinematic color palette from the image */
+    --background: 39 75% 90%; /* #FBE9D0 */
+    --foreground: 196 39% 24%; /* #244855 */
 
-    --card: 220 25% 15%;
-    --card-foreground: 210 40% 98%;
+    --card: 39 75% 94%;
+    --card-foreground: 196 39% 24%; /* #244855 */
 
-    --popover: 220 25% 15%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 39 75% 94%;
+    --popover-foreground: 196 39% 24%; /* #244855 */
 
-    --primary: 262 83% 58%;
-    --primary-foreground: 0 0% 98%;
+    --primary: 196 39% 24%; /* #244855 */
+    --primary-foreground: 39 75% 90%; /* #FBE9D0 */
 
-    --secondary: 199 89% 48%;
-    --secondary-foreground: 0 0% 98%;
+    --secondary: 14 36% 40%; /* #874F41 */
+    --secondary-foreground: 39 75% 90%; /* #FBE9D0 */
 
-    --accent: 340 82% 52%;
-    --accent-foreground: 0 0% 98%;
+    --accent: 8 74% 55%; /* #E64833 */
+    --accent-foreground: 39 75% 90%; /* #FBE9D0 */
 
-    --muted: 220 30% 20%;
-    --muted-foreground: 220 20% 70%;
+    --muted: 174 16% 62%; /* #90AEAD */
+    --muted-foreground: 196 39% 24%; /* #244855 */
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 8 74% 55%; /* #E64833 */
+    --destructive-foreground: 39 75% 90%; /* #FBE9D0 */
 
-    --border: 220 25% 20%;
-    --input: 220 25% 20%;
-    --ring: 262 83% 58%;
+    --border: 174 16% 62%; /* #90AEAD */
+    --input: 174 16% 62%; /* #90AEAD */
+    --ring: 8 74% 55%; /* #E64833 */
 
     --radius: 0.75rem;
 
-    --sidebar-background: 220 30% 10%;
-    --sidebar-foreground: 220 20% 90%;
-    --sidebar-primary: 220 20% 20%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 220 25% 18%;
-    --sidebar-accent-foreground: 220 20% 90%;
-    --sidebar-border: 220 30% 18%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 39 75% 94%;
+    --sidebar-foreground: 196 39% 24%; /* #244855 */
+    --sidebar-primary: 196 39% 24%; /* #244855 */
+    --sidebar-primary-foreground: 39 75% 90%; /* #FBE9D0 */
+    --sidebar-accent: 14 36% 40%; /* #874F41 */
+    --sidebar-accent-foreground: 39 75% 90%; /* #FBE9D0 */
+    --sidebar-border: 174 16% 62%; /* #90AEAD */
+    --sidebar-ring: 8 74% 55%; /* #E64833 */
   }
 
   .dark {

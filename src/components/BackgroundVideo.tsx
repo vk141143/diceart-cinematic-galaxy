@@ -13,15 +13,25 @@ export function BackgroundVideo() {
   return (
     <div className="absolute inset-0 -z-10 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-background/95 via-background/80 to-background/95 z-10"></div>
+      
+      {/* Background GIF */}
+      <div className="absolute inset-0 z-0">
+        <img 
+          src="https://static.wixstatic.com/media/050c69_67cbecfdef084eb282cef89d038ee447~mv2.gif" 
+          alt="Cinematic background" 
+          className="absolute top-1/2 left-1/2 min-w-full min-h-full w-auto h-auto -translate-x-1/2 -translate-y-1/2 object-cover"
+        />
+      </div>
+
+      {/* Fallback video if GIF doesn't load */}
       <video
         ref={videoRef}
         autoPlay
         muted
         loop
         playsInline
-        className="absolute top-1/2 left-1/2 min-w-full min-h-full w-auto h-auto -translate-x-1/2 -translate-y-1/2 object-cover"
+        className="absolute top-1/2 left-1/2 min-w-full min-h-full w-auto h-auto -translate-x-1/2 -translate-y-1/2 object-cover opacity-0"
       >
-        <source src="https://pin.it/6GgpkcY2v" type="video/mp4" />
         <source src="/videos/cinematic-background.mp4" type="video/mp4" />
       </video>
     </div>

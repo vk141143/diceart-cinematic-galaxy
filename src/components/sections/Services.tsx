@@ -1,4 +1,3 @@
-
 import { useRef, useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Film, Video, Star, Sparkles, Palette, Globe, Music, Calendar, MonitorSmartphone, ArrowLeft } from "lucide-react";
@@ -11,6 +10,9 @@ export function Services() {
   const [isVisible, setIsVisible] = useState(false);
   const [activeService, setActiveService] = useState(0);
   const [expandedService, setExpandedService] = useState<number | null>(null);
+  const [originalPositions, setOriginalPositions] = useState<Array<{ x: number; y: number }>>([]);
+  const [targetPosition, setTargetPosition] = useState<{ x: number; y: number } | null>(null);
+  const serviceRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -33,6 +35,28 @@ export function Services() {
       }
     };
   }, []);
+
+  useEffect(() => {
+    // Store the original positions of all service cards when they're first rendered
+    if (serviceRefs.current.length > 0 && originalPositions.length === 0) {
+      const positions = serviceRefs.current.map((ref) => {
+        if (!ref) return { x: 0, y: 0 };
+        const rect = ref.getBoundingClientRect();
+        return { x: rect.left, y: rect.top };
+      });
+      setOriginalPositions(positions);
+
+      // Set the target position to the bottom-right service card
+      if (serviceRefs.current[9]) { // Web Designing is at index 9
+        const rect = serviceRefs.current[9].getBoundingClientRect();
+        const sectionRect = sectionRef.current?.getBoundingClientRect() || { left: 0, top: 0 };
+        setTargetPosition({
+          x: rect.left - sectionRect.left,
+          y: rect.top - sectionRect.top
+        });
+      }
+    }
+  }, [isVisible, originalPositions.length]);
 
   const services = [
     {
@@ -135,60 +159,68 @@ export function Services() {
           {expandedService !== null ? (
             <motion.div
               key="expanded-service"
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 50 }}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
               transition={{ duration: 0.5 }}
               className="relative"
             >
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={closeExpandedService}
-                className="absolute top-4 left-4 z-20 flex items-center gap-2 bg-background/80 backdrop-blur-sm"
+              <motion.div
+                className="absolute inset-0 z-20"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
               >
-                <ArrowLeft size={16} />
-                Back to all services
-              </Button>
-              
-              <Card className="w-full overflow-hidden">
-                <div 
-                  className="h-64 relative"
-                  style={{ 
-                    backgroundImage: `url(${services[expandedService].backgroundImage})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center'
-                  }}
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={closeExpandedService}
+                  className="absolute top-4 left-4 z-30 flex items-center gap-2 bg-background/80 backdrop-blur-sm"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
-                  <div className="absolute bottom-0 left-0 p-6">
-                    <div className="rounded-full bg-accent p-4 w-16 h-16 flex items-center justify-center mb-2">
-                      {services[expandedService].icon}
-                    </div>
-                    <h3 className="text-3xl font-bold">{services[expandedService].title}</h3>
-                  </div>
-                </div>
+                  <ArrowLeft size={16} />
+                  Back to all services
+                </Button>
                 
-                <CardContent className="p-6 pt-4">
-                  <p className="text-lg mb-4">{services[expandedService].description}</p>
-                  <p className="text-muted-foreground">{services[expandedService].detailedDescription}</p>
-                  
-                  <div className="mt-8 flex flex-col gap-4">
-                    <h4 className="text-xl font-semibold">Why Choose Our {services[expandedService].title} Services</h4>
-                    <ul className="list-disc list-inside space-y-2 text-muted-foreground">
-                      <li>Expert team with industry experience</li>
-                      <li>Custom solutions tailored to your specific needs</li>
-                      <li>Cutting-edge technology and creative approaches</li>
-                      <li>Proven track record of successful projects</li>
-                      <li>Collaborative process with regular updates and feedback</li>
-                    </ul>
-                    
-                    <div className="mt-4">
-                      <Button className="bg-accent hover:bg-accent/90 text-accent-foreground">Request a Quote</Button>
+                <Card className="w-full overflow-hidden">
+                  <div 
+                    className="h-64 relative"
+                    style={{ 
+                      backgroundImage: `url(${services[expandedService].backgroundImage})`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center'
+                    }}
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
+                    <div className="absolute bottom-0 left-0 p-6">
+                      <div className="rounded-full bg-accent p-4 w-16 h-16 flex items-center justify-center mb-2">
+                        {services[expandedService].icon}
+                      </div>
+                      <h3 className="text-3xl font-bold">{services[expandedService].title}</h3>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                  
+                  <CardContent className="p-6 pt-4">
+                    <p className="text-lg mb-4">{services[expandedService].description}</p>
+                    <p className="text-muted-foreground">{services[expandedService].detailedDescription}</p>
+                    
+                    <div className="mt-8 flex flex-col gap-4">
+                      <h4 className="text-xl font-semibold">Why Choose Our {services[expandedService].title} Services</h4>
+                      <ul className="list-disc list-inside space-y-2 text-muted-foreground">
+                        <li>Expert team with industry experience</li>
+                        <li>Custom solutions tailored to your specific needs</li>
+                        <li>Cutting-edge technology and creative approaches</li>
+                        <li>Proven track record of successful projects</li>
+                        <li>Collaborative process with regular updates and feedback</li>
+                      </ul>
+                      
+                      <div className="mt-4">
+                        <Button className="bg-accent hover:bg-accent/90 text-accent-foreground">Request a Quote</Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
             </motion.div>
           ) : (
             <motion.div
@@ -197,77 +229,43 @@ export function Services() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.5 }}
+              className="relative"
             >
-              {/* Dot Navigation */}
-              <div className="flex justify-center gap-4 mb-12">
-                {services.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setActiveService(index)}
-                    className={cn(
-                      "w-4 h-4 rounded-full transition-all duration-300 transform",
-                      activeService === index 
-                        ? "bg-accent scale-125" 
-                        : "bg-muted hover:bg-accent/50"
-                    )}
-                    aria-label={`Select service ${index + 1}`}
-                  />
-                ))}
-              </div>
-
-              {/* Service Display */}
-              <div className="relative h-[400px] md:h-[300px] overflow-hidden">
+              {/* Service Grid Layout */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
                 {services.map((service, index) => (
                   <motion.div
                     key={index}
-                    className="absolute top-0 left-0 w-full"
-                    initial={{ opacity: 0, x: 100 }}
-                    animate={{ 
-                      opacity: activeService === index ? 1 : 0,
-                      x: activeService === index ? 0 : 100,
-                      zIndex: activeService === index ? 10 : 0
+                    ref={el => serviceRefs.current[index] = el}
+                    layoutId={`service-card-${index}`}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ 
+                      duration: 0.5,
+                      delay: index * 0.1
                     }}
-                    transition={{ duration: 0.5 }}
+                    whileHover={{ scale: 1.03 }}
+                    className="flex"
                   >
                     <Card 
-                      className="bg-card/80 backdrop-blur-sm border border-primary/10 cursor-pointer hover:shadow-lg transition-all duration-300"
+                      className="bg-card/80 backdrop-blur-sm border border-primary/10 cursor-pointer hover:shadow-lg transition-all duration-300 w-full"
                       onClick={() => handleServiceClick(index)}
                     >
                       <CardHeader className="pb-2">
                         <div className="mb-2 flex justify-center">
-                          <div className="rounded-full bg-background p-4 w-20 h-20 flex items-center justify-center">
+                          <div className="rounded-full bg-background p-4 w-16 h-16 flex items-center justify-center">
                             {service.icon}
                           </div>
                         </div>
-                        <CardTitle className="text-center text-2xl">{service.title}</CardTitle>
+                        <CardTitle className="text-center text-xl">{service.title}</CardTitle>
                       </CardHeader>
                       <CardContent>
-                        <CardDescription className="text-center text-lg">{service.description}</CardDescription>
+                        <CardDescription className="text-center text-sm line-clamp-3">
+                          {service.description}
+                        </CardDescription>
                       </CardContent>
                     </Card>
                   </motion.div>
-                ))}
-              </div>
-              
-              {/* Small preview of all services for mobile scrolling */}
-              <div className="mt-12 grid grid-cols-2 md:grid-cols-5 gap-4">
-                {services.map((service, index) => (
-                  <button 
-                    key={index} 
-                    onClick={() => {
-                      setActiveService(index);
-                      handleServiceClick(index);
-                    }}
-                    className={cn(
-                      "p-2 rounded-lg transition-all duration-300",
-                      activeService === index ? "bg-accent/20 ring-1 ring-accent" : "hover:bg-accent/5"
-                    )}
-                  >
-                    <div className="flex flex-col items-center">
-                      {service.icon}
-                      <span className="text-xs mt-2 text-center">{service.title}</span>
-                    </div>
-                  </button>
                 ))}
               </div>
             </motion.div>
